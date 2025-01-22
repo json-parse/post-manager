@@ -1,24 +1,28 @@
-import * as React from "react";
+import React from "react";
 import { useGetPostByIdQuery } from "./services/posts.ts";
 
 export default function App() {
   // Using a query hook automatically fetches data and returns query values
-  const { data, error, isLoading } = useGetPostByIdQuery(1);
-  // Individual hooks are also accessible under the generated endpoints:
-  // const { data, error, isLoading } = postApi.endpoints.getPostById.useQuery(1)
+  const { data, error } = useGetPostByIdQuery(1);
+
+  if (!data) return <p>Loading...</p>;
+  if (error) return <p>Oh no, there was an error</p>;
+
+  const { post, comments } = data;
 
   return (
-    <div className="App">
-      {error ? (
-        <>Oh no, there was an error</>
-      ) : isLoading ? (
-        <>Loading...</>
-      ) : data ? (
-        <>
-          <h3>{data.title}</h3>
-          <p>{data.body}</p>
-        </>
-      ) : null}
+    <div>
+      <h1>{post.title}</h1>
+      <p>{post.body}</p>
+      <h2>Comments</h2>
+      <ul>
+        {comments.map((comment) => (
+          <li key={comment.id}>
+            <p>{comment.name}</p>
+            <p>{comment.body}</p>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
