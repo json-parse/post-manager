@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { User, Post, Comment } from "./types.ts";
+import type { User, Post } from "./types.ts";
 
 // Define a service using a base URL and expected endpoints
 export const postApi = createApi({
@@ -8,42 +8,18 @@ export const postApi = createApi({
     baseUrl: "https://jsonplaceholder.typicode.com/",
   }),
   endpoints: (builder) => ({
-    getUserByUsername: builder.query<User, string>({
-      queryFn: async (username, _queryApi, _extraOptions, fetchWithBQ) => {
-        const result = await fetchWithBQ(`users?username=${username}`);
-        if (result.error) return { error: result.error };
-        const user = (result.data as User[])[0]; // Return the first instance
-        return { data: user };
-      },
+    getUserByUsername: builder.query<User[], string>({
+      query: (username) => `users?username=${username}`,
     }),
     getPostsByUserId: builder.query<Post[], number>({
-      async queryFn(id, _queryApi, _extraOptions, fetchWithBQ) {
-        // Fetch the posts
-        const result = await fetchWithBQ(`posts?userId=${id}`);
-        if (result.error) return { error: result.error };
-        return {
-          data: result.data as Post[],
-        };
-      },
+      query: (userId) => `posts?userId=${userId}`,
     }),
-    getPostById: builder.query<{ post: Post; comments: Comment[] }, number>({
-      async queryFn(id, _queryApi, _extraOptions, fetchWithBQ) {
-        // Fetch the post
-        const postResult = await fetchWithBQ(`posts/${id}`);
-        if (postResult.error) return { error: postResult.error };
-
-        // Fetch the comments
-        const commentsResult = await fetchWithBQ(`comments?postId=${id}`);
-        if (commentsResult.error) return { error: commentsResult.error };
-
-        // Combine the post and comments
-        return {
-          data: {
-            post: postResult.data as Post,
-            comments: commentsResult.data as Comment[],
-          },
-        };
-      },
+    createPost: builder.mutation<Post, Partial<Post>>({
+      query: (post) => ({
+        url: "posts",
+        method: "POST",
+        body: post,
+      }),
     }),
   }),
 });
@@ -53,5 +29,5 @@ export const postApi = createApi({
 export const {
   useGetUserByUsernameQuery,
   useGetPostsByUserIdQuery,
-  useGetPostByIdQuery,
+  useCreatePostMutation,
 } = postApi;

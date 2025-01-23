@@ -28,8 +28,8 @@ const App = () => {
   if (data)
     return (
       <>
-        <p>Email: {data.email}</p>
-        <PostList userId={data.id} />
+        <p>Email: {data[0].email}</p>
+        <PostList userId={data[0].id} />
       </>
     );
   return <Login setUsername={setUsername} />;
