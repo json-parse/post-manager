@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetPostByIdQuery } from "../services/posts.ts";
-import { setStatus, initialState } from "../redux/statusSlice.ts";
+import { setStatus } from "../redux/statusSlice.ts";
 import { RootState } from "../redux/store.ts";
 
 const PostList = ({ postId }) => {
@@ -16,7 +16,7 @@ const PostList = ({ postId }) => {
     } else if (error) {
       dispatch(setStatus("error"));
     } else {
-      dispatch(setStatus(initialState.value));
+      dispatch(setStatus("idle"));
     }
   }, [error, data, dispatch]);
 

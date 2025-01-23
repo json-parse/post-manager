@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useGetUserByUsernameQuery } from "./services/posts.ts";
-import { setStatus, initialState } from "./redux/statusSlice.ts";
+import { setStatus } from "./redux/statusSlice.ts";
 import Login from "./pages/Login.tsx";
 import PostList from "./pages/PostList.tsx";
 
@@ -21,7 +21,7 @@ const App = () => {
     } else if (!data && username) {
       dispatch(setStatus("noUser"));
     } else {
-      dispatch(setStatus(initialState.value));
+      dispatch(setStatus("idle"));
     }
   }, [isLoading, error, data, username, dispatch]);
 

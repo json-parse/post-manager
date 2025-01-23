@@ -4,21 +4,25 @@ interface StatusState {
   value: string;
 }
 
+const initialState: StatusState = {
+  value: "",
+};
+
 const STATUS_MSG = {
   loading: "loading...",
   error: "Oh no, there was an error",
   noUser: "User does not exist",
-};
-
-export const initialState: StatusState = {
-  value: "",
+  idle: initialState.value,
 };
 
 const statusSlice = createSlice({
   name: "status",
   initialState,
   reducers: {
-    setStatus: (state, action: PayloadAction<string>) => {
+    setStatus: (
+      state,
+      action: PayloadAction<"loading" | "error" | "noUser" | "idle">
+    ) => {
       state.value = STATUS_MSG[action.payload];
     },
   },
