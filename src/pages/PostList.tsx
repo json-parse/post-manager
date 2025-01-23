@@ -1,39 +1,31 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useGetPostByIdQuery } from "../services/posts.ts";
+import { useGetPostsByUserIdQuery } from "../services/posts.ts";
 import { setStatus } from "../redux/statusSlice.ts";
 import { RootState } from "../redux/store.ts";
+import Post from "../components/Post.tsx";
 
-const PostList = ({ postId }) => {
+const PostList = ({ userId }) => {
   const dispatch = useDispatch();
   const status = useSelector((state: RootState) => state.status.value);
   // Using a query hook automatically fetches data and returns query values
-  const { data, error } = useGetPostByIdQuery(postId);
+  const { data, error, isLoading } = useGetPostsByUserIdQuery(userId);
 
   useEffect(() => {
-    if (!data) {
-      dispatch(setStatus("loading"));
-    } else if (error) {
+    if (error) {
       dispatch(setStatus("error"));
     } else {
-      dispatch(setStatus("idle"));
+      dispatch(setStatus("loading"));
     }
-  }, [error, data, dispatch]);
+  }, [isLoading, error, data, dispatch]);
 
   if (data)
     return (
       <>
-        <h1>{data.post.title}</h1>
-        <p>{data.post.body}</p>
-        <h2>Comments</h2>
-        <ul>
-          {data.comments.map((comment) => (
-            <li key={comment.id}>
-              <p>{comment.name}</p>
-              <p>{comment.body}</p>
-            </li>
-          ))}
-        </ul>
+        {data.map((post) => (
+          <Post key={post.id} postId={post.id} />
+        ))}
+        {status && <p>{status}</p>}
       </>
     );
   return <p>{status}</p>;

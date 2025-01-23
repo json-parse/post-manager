@@ -13,7 +13,7 @@ const Login = ({ setUsername }) => {
   };
 
   return (
-    <div>
+    <>
       <h1>Log in</h1>
       <form onSubmit={onLogin}>
         <input
@@ -24,8 +24,8 @@ const Login = ({ setUsername }) => {
         />
         <button type="submit">Login</button>
       </form>
-      <p>{status}</p>
-    </div>
+      {status && <p>{status}</p>}
+    </>
   );
 };
 

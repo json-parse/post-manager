@@ -9,7 +9,7 @@ const initialState: StatusState = {
 };
 
 const STATUS_MSG = {
-  loading: "loading...",
+  loading: "Loading...",
   error: "Oh no, there was an error",
   noUser: "User does not exist",
   idle: initialState.value,

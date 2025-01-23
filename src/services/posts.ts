@@ -16,6 +16,16 @@ export const postApi = createApi({
         return { data: user };
       },
     }),
+    getPostsByUserId: builder.query<Post[], number>({
+      async queryFn(id, _queryApi, _extraOptions, fetchWithBQ) {
+        // Fetch the posts
+        const result = await fetchWithBQ(`posts?userId=${id}`);
+        if (result.error) return { error: result.error };
+        return {
+          data: result.data as Post[],
+        };
+      },
+    }),
     getPostById: builder.query<{ post: Post; comments: Comment[] }, number>({
       async queryFn(id, _queryApi, _extraOptions, fetchWithBQ) {
         // Fetch the post
@@ -40,4 +50,8 @@ export const postApi = createApi({
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetUserByUsernameQuery, useGetPostByIdQuery } = postApi;
+export const {
+  useGetUserByUsernameQuery,
+  useGetPostsByUserIdQuery,
+  useGetPostByIdQuery,
+} = postApi;

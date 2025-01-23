@@ -20,8 +20,8 @@ const App = () => {
       dispatch(setStatus("error"));
     } else if (!data && username) {
       dispatch(setStatus("noUser"));
-    } else {
-      dispatch(setStatus("idle"));
+    } else if (data) {
+      dispatch(setStatus("loading"));
     }
   }, [isLoading, error, data, username, dispatch]);
 
@@ -29,7 +29,7 @@ const App = () => {
     return (
       <>
         <p>Email: {data.email}</p>
-        <PostList postId={1} />
+        <PostList userId={data.id} />
       </>
     );
   return <Login setUsername={setUsername} />;
