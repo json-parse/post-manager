@@ -1,28 +1,38 @@
-import React from "react";
-import { useGetPostByIdQuery } from "./services/posts.ts";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useGetUserByUsernameQuery } from "./services/posts.ts";
+import { setStatus, initialState } from "./redux/statusSlice.ts";
+import Login from "./pages/Login.tsx";
+import PostList from "./pages/PostList.tsx";
 
-export default function App() {
-  // Using a query hook automatically fetches data and returns query values
-  const { data, error } = useGetPostByIdQuery(1);
+const App = () => {
+  const [username, setUsername] = useState("");
+  const dispatch = useDispatch();
 
-  if (!data) return <p>Loading...</p>;
-  if (error) return <p>Oh no, there was an error</p>;
+  const { data, error, isLoading } = useGetUserByUsernameQuery(username, {
+    skip: !username, // Skip the query if username is empty
+  });
 
-  const { post, comments } = data;
+  useEffect(() => {
+    if (isLoading) {
+      dispatch(setStatus("loading"));
+    } else if (error) {
+      dispatch(setStatus("error"));
+    } else if (!data && username) {
+      dispatch(setStatus("noUser"));
+    } else {
+      dispatch(setStatus(initialState.value));
+    }
+  }, [isLoading, error, data, username, dispatch]);
 
-  return (
-    <div>
-      <h1>{post.title}</h1>
-      <p>{post.body}</p>
-      <h2>Comments</h2>
-      <ul>
-        {comments.map((comment) => (
-          <li key={comment.id}>
-            <p>{comment.name}</p>
-            <p>{comment.body}</p>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
+  if (data)
+    return (
+      <>
+        <p>Email: {data.email}</p>
+        <PostList postId={1} />
+      </>
+    );
+  return <Login setUsername={setUsername} />;
+};
+
+export default App;
