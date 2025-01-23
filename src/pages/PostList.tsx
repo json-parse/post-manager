@@ -45,16 +45,21 @@ const PostList = ({ userId }) => {
     return (
       <>
         <form onSubmit={onPublish}>
-          <input name="title" placeholder="Title" />
-          <textarea name="body" placeholder="Write your post here..." />
+          <input name="title" placeholder="Title" required />
+          <textarea
+            name="body"
+            placeholder="Write your post here..."
+            required
+          />
           <button type="submit">Publish</button>
         </form>
+        {status && <p>{status}</p>}
         {posts.map((post) => (
           <Post key={post.id} post={post} />
         ))}
       </>
     );
-  return <p>{status}</p>;
+  return null;
 };
 
 export default PostList;

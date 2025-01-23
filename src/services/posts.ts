@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { User, Post } from "./types.ts";
+import type { User, Post, Comment } from "./types.ts";
 
 // Define a service using a base URL and expected endpoints
 export const postApi = createApi({
@@ -13,6 +13,9 @@ export const postApi = createApi({
     }),
     getPostsByUserId: builder.query<Post[], number>({
       query: (userId) => `posts?userId=${userId}`,
+    }),
+    getCommentsByPostId: builder.query<Comment[], number>({
+      query: (postId) => `comments?postId=${postId}`,
     }),
     createPost: builder.mutation<Post, Partial<Post>>({
       query: (post) => ({
@@ -29,5 +32,6 @@ export const postApi = createApi({
 export const {
   useGetUserByUsernameQuery,
   useGetPostsByUserIdQuery,
+  useGetCommentsByPostIdQuery,
   useCreatePostMutation,
 } = postApi;
