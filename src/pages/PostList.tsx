@@ -10,6 +10,7 @@ import { setStatus } from "../redux/statusSlice.ts";
 import { RootState } from "../redux/store.ts";
 import Post from "../components/Post.tsx";
 import { Post as PostType } from "../services/types.ts";
+import Grid from "@mui/material/Grid2";
 
 const PostList = ({ userId }) => {
   const dispatch = useDispatch();
@@ -61,18 +62,21 @@ const PostList = ({ userId }) => {
 
   if (posts)
     return (
-      <>
-        <Post handleSave={handleCreate} />
+      <Grid container spacing={2} sx={{ p: 3 }}>
+        <Grid size={12}>
+          <Post handleSave={handleCreate} />
+        </Grid>
         {status && <p>{status}</p>}
         {posts.map((post, i) => (
-          <Post
-            key={i}
-            post={post}
-            handleSave={handleUpdate}
-            handleDelete={handleDelete}
-          />
+          <Grid size={4} key={i}>
+            <Post
+              post={post}
+              handleSave={handleUpdate}
+              handleDelete={handleDelete}
+            />
+          </Grid>
         ))}
-      </>
+      </Grid>
     );
   return null;
 };

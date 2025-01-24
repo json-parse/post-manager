@@ -28,7 +28,9 @@ const App = () => {
   if (data)
     return (
       <>
-        <p>Email: {data[0].email}</p>
+        <header>
+          <p>Email: {data[0].email}</p>
+        </header>
         <PostList userId={data[0].id} />
       </>
     );
