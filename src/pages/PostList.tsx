@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   useGetPostsByUserIdQuery,
   useCreatePostMutation,
+  useDeletePostMutation,
 } from "../services/posts.ts";
 import { setStatus } from "../redux/statusSlice.ts";
 import { RootState } from "../redux/store.ts";
@@ -10,10 +11,11 @@ import Post from "../components/Post.tsx";
 import { Post as PostType } from "../services/types.ts";
 
 const PostList = ({ userId }) => {
-  const [createPost] = useCreatePostMutation();
   const dispatch = useDispatch();
   const status = useSelector((state: RootState) => state.status.value);
   const { data, error, isLoading } = useGetPostsByUserIdQuery(userId);
+  const [createPost] = useCreatePostMutation();
+  const [deletePost] = useDeletePostMutation();
   const [posts, setPosts] = useState<PostType[]>([]);
 
   useEffect(() => {
@@ -41,6 +43,13 @@ const PostList = ({ userId }) => {
     }
   };
 
+  const onDelete = async (postId) => {
+    const deletedPost = await deletePost(postId);
+    if (deletedPost.data && Object.keys(deletedPost.data).length === 0) {
+      setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
+    }
+  };
+
   if (posts)
     return (
       <>
@@ -54,8 +63,8 @@ const PostList = ({ userId }) => {
           <button type="submit">Publish</button>
         </form>
         {status && <p>{status}</p>}
-        {posts.map((post) => (
-          <Post key={post.id} post={post} />
+        {posts.map((post, i) => (
+          <Post key={i} post={post} onDelete={onDelete} />
         ))}
       </>
     );

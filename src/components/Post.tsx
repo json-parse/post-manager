@@ -3,7 +3,7 @@ import { useGetCommentsByPostIdQuery } from "../services/posts.ts";
 import { useDispatch } from "react-redux";
 import { setStatus } from "../redux/statusSlice.ts";
 
-const Post = ({ post }) => {
+const Post = ({ post, onDelete }) => {
   const dispatch = useDispatch();
 
   const {
@@ -27,6 +27,7 @@ const Post = ({ post }) => {
       <h2>{post.title}</h2>
       <p>{post.body}</p>
       <h4>Comments ({comments?.length ?? 0})</h4>
+      <button onClick={() => onDelete(post.id)}>Delete</button>
     </>
   );
 };
