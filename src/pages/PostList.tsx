@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   useGetPostsByUserIdQuery,
   useCreatePostMutation,
+  useUpdatePostMutation,
   useDeletePostMutation,
 } from "../services/posts.ts";
 import { setStatus } from "../redux/statusSlice.ts";
@@ -15,6 +16,7 @@ const PostList = ({ userId }) => {
   const status = useSelector((state: RootState) => state.status.value);
   const { data, error, isLoading } = useGetPostsByUserIdQuery(userId);
   const [createPost] = useCreatePostMutation();
+  const [updatePost] = useUpdatePostMutation();
   const [deletePost] = useDeletePostMutation();
   const [posts, setPosts] = useState<PostType[]>([]);
 
@@ -29,13 +31,11 @@ const PostList = ({ userId }) => {
     }
   }, [isLoading, error, data, dispatch]);
 
-  const onPublish = async (event: React.FormEvent) => {
-    event.preventDefault();
-    const formData = new FormData(event.target as HTMLFormElement);
+  const handleCreate = async (formData) => {
     const post = {
       userId,
-      title: formData.get("title") as string,
-      body: formData.get("body") as string,
+      title: formData.title,
+      body: formData.body,
     };
     const createdPost = await createPost(post);
     if (createdPost.data) {
@@ -43,7 +43,16 @@ const PostList = ({ userId }) => {
     }
   };
 
-  const onDelete = async (postId) => {
+  const handleUpdate = async (post) => {
+    const updatedPost = await updatePost(post);
+    if (updatedPost.data) {
+      setPosts((prevPosts) =>
+        prevPosts.map((p) => (p.id === post.id ? updatedPost.data : p))
+      );
+    }
+  };
+
+  const handleDelete = async (postId) => {
     const deletedPost = await deletePost(postId);
     if (deletedPost.data && Object.keys(deletedPost.data).length === 0) {
       setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
@@ -53,18 +62,15 @@ const PostList = ({ userId }) => {
   if (posts)
     return (
       <>
-        <form onSubmit={onPublish}>
-          <input name="title" placeholder="Title" required />
-          <textarea
-            name="body"
-            placeholder="Write your post here..."
-            required
-          />
-          <button type="submit">Publish</button>
-        </form>
+        <Post handleSave={handleCreate} />
         {status && <p>{status}</p>}
         {posts.map((post, i) => (
-          <Post key={i} post={post} onDelete={onDelete} />
+          <Post
+            key={i}
+            post={post}
+            handleSave={handleUpdate}
+            handleDelete={handleDelete}
+          />
         ))}
       </>
     );

@@ -24,6 +24,13 @@ export const postApi = createApi({
         body: post,
       }),
     }),
+    updatePost: builder.mutation<Post, Partial<Post>>({
+      query: ({ id, ...post }) => ({
+        url: `posts/${id}`,
+        method: "PATCH",
+        body: post,
+      }),
+    }),
     deletePost: builder.mutation<{}, number>({
       query: (postId) => ({
         url: `posts/${postId}`,
@@ -40,5 +47,6 @@ export const {
   useGetPostsByUserIdQuery,
   useGetCommentsByPostIdQuery,
   useCreatePostMutation,
+  useUpdatePostMutation,
   useDeletePostMutation,
 } = postApi;
