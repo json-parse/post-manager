@@ -14,7 +14,7 @@ const Login = ({ setUsername }) => {
 
   return (
     <>
-      <h1>Log in</h1>
+      <h2>Log in</h2>
       <form onSubmit={onLogin}>
         <input
           name="username"

@@ -8,6 +8,8 @@ import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid2";
+import { TextField } from "@mui/material";
 
 interface PostProps {
   handleSave: (post: Partial<PostType>) => void;
@@ -21,7 +23,9 @@ const Post = ({ post, handleSave, handleDelete }: PostProps) => {
   const [editablePost, setEditablePost] = useState<Partial<PostType>>(
     post ?? { title: "", body: "" }
   );
-
+  const [errors, setErrors] = useState<
+    { [key in keyof PostType]?: string } | undefined
+  >(undefined);
   const {
     data: comments,
     error,
@@ -38,11 +42,32 @@ const Post = ({ post, handleSave, handleDelete }: PostProps) => {
     }
   }, [isLoading, error, comments, dispatch]);
 
+  const validate = (key: keyof PostType) => {
+    if (!editablePost[key]) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [key]: "This field is required",
+      }));
+    } else {
+      setErrors((prevErrors) => {
+        const newErrors = { ...prevErrors };
+        delete newErrors[key];
+        return Object.keys(newErrors).length ? newErrors : undefined;
+      });
+    }
+  };
+
   const handleEdit = () => {
-    if (isEdit) {
+    validate("title");
+    validate("body");
+    if (isEdit && editablePost.title && editablePost.body) {
       handleSave(editablePost);
     }
-    setIsEdit(!isEdit);
+    if (post) {
+      setIsEdit(!isEdit);
+    } else {
+      setEditablePost({ title: "", body: "" });
+    }
   };
 
   return (
@@ -50,32 +75,44 @@ const Post = ({ post, handleSave, handleDelete }: PostProps) => {
       <CardContent>
         {post && !isEdit ? (
           <>
-            <Typography variant="h4">{post.title}</Typography>
+            <Typography variant="h5" component="h3">
+              {post.title}
+            </Typography>
             <Typography variant="body2">{post.body}</Typography>
           </>
         ) : (
-          <>
-            <input
+          <Grid container spacing={2} direction="column">
+            <TextField
+              label="Title"
+              variant="outlined"
+              multiline
               name="title"
               value={editablePost?.title}
               onChange={(e) =>
                 setEditablePost({ ...editablePost, title: e.target.value })
               }
+              onBlur={() => validate("title")}
               placeholder="Title"
               required
+              error={Boolean(errors?.title)}
             />
-            <textarea
+            <TextField
+              label="Text"
+              variant="outlined"
+              multiline
               name="body"
               value={editablePost?.body}
               onChange={(e) =>
                 setEditablePost({ ...editablePost, body: e.target.value })
               }
+              onBlur={() => validate("body")}
               placeholder="Write your post here..."
               required
+              error={Boolean(errors?.body)}
             />
-          </>
+          </Grid>
         )}
-        {comments && (
+        {post && (
           <Typography sx={{ color: "text.secondary", mt: 1.5 }}>
             Comments ({comments?.length ?? 0})
           </Typography>
@@ -83,11 +120,19 @@ const Post = ({ post, handleSave, handleDelete }: PostProps) => {
       </CardContent>
       <CardActions>
         {post && handleDelete && (
-          <Button variant="outlined" onClick={() => handleDelete(post.id)}>
+          <Button
+            variant="outlined"
+            disabled={isEdit}
+            onClick={() => handleDelete(post.id)}
+          >
             Delete
           </Button>
         )}
-        <Button variant="contained" onClick={handleEdit}>
+        <Button
+          variant="contained"
+          onClick={handleEdit}
+          disabled={Boolean(errors)}
+        >
           {isEdit ? "Save" : "Edit"}
         </Button>
       </CardActions>
