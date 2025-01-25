@@ -1,4 +1,10 @@
 import React, { useEffect, useState } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useGetUserByUsernameQuery } from "./services/posts.ts";
 import { setStatus } from "./redux/statusSlice.ts";
@@ -23,7 +29,7 @@ const App = () => {
       dispatch(setStatus("loading"));
     } else if (error) {
       dispatch(setStatus("error"));
-    } else if (!data && username) {
+    } else if (!data?.length && username) {
       dispatch(setStatus("noUser"));
     } else if (data) {
       dispatch(setStatus("loading"));
@@ -38,7 +44,7 @@ const App = () => {
             <Typography variant="h6" component="h1" sx={{ flexGrow: 1 }}>
               Post Manager
             </Typography>
-            {data ? (
+            {data?.length ? (
               <Typography variant="body2">{data[0].email}</Typography>
             ) : (
               <Button color="inherit">Login</Button>
@@ -47,11 +53,23 @@ const App = () => {
         </AppBar>
       </header>
       <Container sx={{ py: 4 }}>
-        {data ? (
-          <PostList userId={data[0].id} />
-        ) : (
-          <Login setUsername={setUsername} />
-        )}
+        <Router>
+          <Routes>
+            {data?.length && (
+              <Route path="/" element={<PostList user={data[0]} />} />
+            )}
+            <Route
+              path="/login"
+              element={
+                <Login
+                  setUsername={setUsername}
+                  isAuthenticated={Boolean(data?.length)}
+                />
+              }
+            />
+            <Route path={"*"} element={<Navigate to={"/login"} />} />
+          </Routes>
+        </Router>
       </Container>
     </>
   );

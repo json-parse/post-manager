@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store.ts";
 import Card from "@mui/material/Card";
@@ -8,10 +8,18 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid2";
 import { TextField } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
-const Login = ({ setUsername }) => {
+const Login = ({ setUsername, isAuthenticated }) => {
   const [defaultValue, setDefaultValue] = useState("Bret");
+  const navigate = useNavigate();
   const status = useSelector((state: RootState) => state.status.value);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate]);
 
   const onLogin = (event: React.FormEvent) => {
     event.preventDefault();
@@ -47,6 +55,7 @@ const Login = ({ setUsername }) => {
                 onChange={(event) => setDefaultValue(event.target.value)}
                 placeholder="Username"
               />
+              {status && <p>{status}</p>}
             </CardContent>
             <CardActions sx={{ justifyContent: "flex-end", px: 2, pb: 2 }}>
               <Button variant="contained" type="submit">
@@ -55,7 +64,6 @@ const Login = ({ setUsername }) => {
             </CardActions>
           </form>
         </Card>
-        {status && <p>{status}</p>}
       </Grid>
     </Grid>
   );

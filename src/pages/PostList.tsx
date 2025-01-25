@@ -13,10 +13,10 @@ import { Post as PostType } from "../services/types.ts";
 import Grid from "@mui/material/Grid2";
 import { Typography } from "@mui/material";
 
-const PostList = ({ userId }) => {
+const PostList = ({ user }) => {
   const dispatch = useDispatch();
   const status = useSelector((state: RootState) => state.status.value);
-  const { data, error, isLoading } = useGetPostsByUserIdQuery(userId);
+  const { data, error, isLoading } = useGetPostsByUserIdQuery(user.id);
   const [createPost] = useCreatePostMutation();
   const [updatePost] = useUpdatePostMutation();
   const [deletePost] = useDeletePostMutation();
@@ -35,7 +35,7 @@ const PostList = ({ userId }) => {
 
   const handleCreate = async (formData) => {
     const post = {
-      userId,
+      userId: user.id,
       title: formData.title,
       body: formData.body,
     };
@@ -66,7 +66,7 @@ const PostList = ({ userId }) => {
       <Grid container spacing={4} direction="column">
         <Grid>
           <Typography variant="h4" component="h2" gutterBottom>
-            Create Post
+            Post something new, {user.username}!
           </Typography>
           <Grid size={{ md: 6 }}>
             <Post handleSave={handleCreate} />
