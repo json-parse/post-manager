@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store.ts";
 import Card from "@mui/material/Card";
@@ -17,7 +17,7 @@ const Login = ({ setUsername, isAuthenticated }) => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate("/");
+      navigate("/manager");
     }
   }, [isAuthenticated, navigate]);
 

@@ -14,6 +14,9 @@ export const postApi = createApi({
     getPostsByUserId: builder.query<Post[], number>({
       query: (userId) => `posts?userId=${userId}`,
     }),
+    getAllPosts: builder.query<Post[], void>({
+      query: () => "posts",
+    }),
     getCommentsByPostId: builder.query<Comment[], number>({
       query: (postId) => `comments?postId=${postId}`,
     }),
@@ -45,6 +48,7 @@ export const postApi = createApi({
 export const {
   useGetUserByUsernameQuery,
   useGetPostsByUserIdQuery,
+  useGetAllPostsQuery,
   useGetCommentsByPostIdQuery,
   useCreatePostMutation,
   useUpdatePostMutation,

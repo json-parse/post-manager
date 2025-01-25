@@ -12,7 +12,7 @@ import Grid from "@mui/material/Grid2";
 import { TextField } from "@mui/material";
 
 interface PostProps {
-  handleSave: (post: Partial<PostType>) => void;
+  handleSave?: (post: Partial<PostType>) => void;
   handleDelete?: (postId: number) => void;
   post?: PostType;
 }
@@ -60,12 +60,16 @@ const Post = ({ post, handleSave, handleDelete }: PostProps) => {
   const handleEdit = () => {
     validate("title");
     validate("body");
-    if (isEdit && editablePost.title && editablePost.body) {
+    const canEdit =
+      isEdit && handleSave && editablePost.title && editablePost.body;
+    if (canEdit) {
       handleSave(editablePost);
     }
     if (post) {
+      // toggle edit mode if editing an existing post
       setIsEdit(!isEdit);
     } else {
+      // reset values if creating a new post
       setEditablePost({ title: "", body: "" });
     }
   };
@@ -128,13 +132,15 @@ const Post = ({ post, handleSave, handleDelete }: PostProps) => {
             Delete
           </Button>
         )}
-        <Button
-          variant="contained"
-          onClick={handleEdit}
-          disabled={Boolean(errors)}
-        >
-          {isEdit ? "Save" : "Edit"}
-        </Button>
+        {handleSave && (
+          <Button
+            variant="contained"
+            onClick={handleEdit}
+            disabled={Boolean(errors)}
+          >
+            {isEdit ? "Save" : "Edit"}
+          </Button>
+        )}
       </CardActions>
     </Card>
   );
