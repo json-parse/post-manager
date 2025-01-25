@@ -1,5 +1,6 @@
 import * as React from "react";
 import { createRoot } from "react-dom/client";
+import "./i18n.ts";
 import { Provider } from "react-redux";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";

@@ -9,11 +9,13 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid2";
 import { TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const Login = ({ setUsername, isAuthenticated }) => {
   const [defaultValue, setDefaultValue] = useState("Bret");
   const navigate = useNavigate();
   const status = useSelector((state: RootState) => state.status.value);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -44,12 +46,12 @@ const Login = ({ setUsername, isAuthenticated }) => {
                 gutterBottom
                 sx={{ p: 4, textAlign: "center" }}
               >
-                Log in
+                {t("login")}
               </Typography>
               <TextField
                 variant="outlined"
                 fullWidth
-                label="Username"
+                label={t("username")}
                 name="username"
                 value={defaultValue}
                 onChange={(event) => setDefaultValue(event.target.value)}
@@ -59,7 +61,7 @@ const Login = ({ setUsername, isAuthenticated }) => {
             </CardContent>
             <CardActions sx={{ justifyContent: "flex-end", px: 2, pb: 2 }}>
               <Button variant="contained" type="submit">
-                Login
+                {t("login")}
               </Button>
             </CardActions>
           </form>

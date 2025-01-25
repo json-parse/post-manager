@@ -1,0 +1,18 @@
+{
+  "postManager": "Post Manager",
+  "login": "Login",
+  "username": "Username",
+  "posts": "Posts",
+  "post": {
+    "title": "Title",
+    "text": "Text",
+    "comments": "Comments ({{count}})"
+  },
+  "createNewPost": "Post something new, {{username}}!",
+  "delete": "Delete",
+  "edit": "Edit",
+  "save": "Save",
+  "error": {
+    "required": "This field is required"
+  }
+}

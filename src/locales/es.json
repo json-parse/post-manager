@@ -1,0 +1,18 @@
+{
+  "postManager": "Gestor de Publicaciones",
+  "login": "Iniciar sesión",
+  "username": "Nombre de usuario",
+  "posts": "Publicaciones",
+  "post": {
+    "title": "Título",
+    "text": "Texto",
+    "comments": "Comentarios ({{count}})"
+  },
+  "createNewPost": "¡Publica algo nuevo, {{username}}!",
+  "delete": "Eliminar",
+  "edit": "Editar",
+  "save": "Guardar",
+  "error": {
+    "required": "Este campo es obligatorio"
+  }
+}

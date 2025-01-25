@@ -12,6 +12,7 @@ import { Post as PostType } from "../services/types.ts";
 import Grid from "@mui/material/Grid2";
 import { Typography } from "@mui/material";
 import PostList from "../components/PostList.tsx";
+import { t } from "i18next";
 
 const Manager = ({ user }) => {
   const dispatch = useDispatch();
@@ -65,7 +66,7 @@ const Manager = ({ user }) => {
       <Grid container spacing={4} direction="column">
         <Grid>
           <Typography variant="h4" component="h2" gutterBottom>
-            Post something new, {user.username}!
+            {t("createNewPost", { username: user.username })}
           </Typography>
           <Grid size={{ md: 6 }}>
             <Post handleSave={handleCreate} />

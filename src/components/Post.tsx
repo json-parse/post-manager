@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid2";
 import { TextField } from "@mui/material";
+import { t } from "i18next";
 
 interface PostProps {
   handleSave?: (post: Partial<PostType>) => void;
@@ -46,7 +47,7 @@ const Post = ({ post, handleSave, handleDelete }: PostProps) => {
     if (!editablePost[key]) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        [key]: "This field is required",
+        [key]: t("error.required"),
       }));
     } else {
       setErrors((prevErrors) => {
@@ -87,7 +88,7 @@ const Post = ({ post, handleSave, handleDelete }: PostProps) => {
         ) : (
           <Grid container spacing={2} direction="column">
             <TextField
-              label="Title"
+              label={t("post.title")}
               variant="outlined"
               multiline
               name="title"
@@ -99,9 +100,10 @@ const Post = ({ post, handleSave, handleDelete }: PostProps) => {
               placeholder="Title"
               required
               error={Boolean(errors?.title)}
+              helperText={errors?.title}
             />
             <TextField
-              label="Text"
+              label={t("post.text")}
               variant="outlined"
               multiline
               name="body"
@@ -113,12 +115,13 @@ const Post = ({ post, handleSave, handleDelete }: PostProps) => {
               placeholder="Write your post here..."
               required
               error={Boolean(errors?.body)}
+              helperText={errors?.body}
             />
           </Grid>
         )}
         {post && (
           <Typography sx={{ color: "text.secondary", mt: 1.5 }}>
-            Comments ({comments?.length ?? 0})
+            {t("post.comments", { count: comments?.length })}
           </Typography>
         )}
       </CardContent>
@@ -129,7 +132,7 @@ const Post = ({ post, handleSave, handleDelete }: PostProps) => {
             disabled={isEdit}
             onClick={() => handleDelete(post.id)}
           >
-            Delete
+            {t("delete")}
           </Button>
         )}
         {handleSave && (
@@ -138,7 +141,7 @@ const Post = ({ post, handleSave, handleDelete }: PostProps) => {
             onClick={handleEdit}
             disabled={Boolean(errors)}
           >
-            {isEdit ? "Save" : "Edit"}
+            {t(isEdit ? "save" : "edit")}
           </Button>
         )}
       </CardActions>
