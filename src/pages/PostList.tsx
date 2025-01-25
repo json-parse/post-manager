@@ -68,7 +68,7 @@ const PostList = ({ userId }) => {
           <Typography variant="h4" component="h2" gutterBottom>
             Create Post
           </Typography>
-          <Grid size={6}>
+          <Grid size={{ md: 6 }}>
             <Post handleSave={handleCreate} />
           </Grid>
         </Grid>
@@ -79,7 +79,7 @@ const PostList = ({ userId }) => {
           {status && <p>{status}</p>}
           <Grid container spacing={2}>
             {posts.map((post, i) => (
-              <Grid size={6} key={i}>
+              <Grid size={{ md: 6 }} key={i}>
                 <Post
                   post={post}
                   handleSave={handleUpdate}

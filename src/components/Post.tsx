@@ -118,7 +118,7 @@ const Post = ({ post, handleSave, handleDelete }: PostProps) => {
           </Typography>
         )}
       </CardContent>
-      <CardActions>
+      <CardActions sx={{ justifyContent: "flex-end", px: 2, pb: 2 }}>
         {post && handleDelete && (
           <Button
             variant="outlined"
