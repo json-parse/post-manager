@@ -16,10 +16,11 @@ import { useTranslation } from "react-i18next";
 const App = () => {
   const [username, setUsername] = useState("");
   const dispatch = useDispatch();
+  const { t } = useTranslation();
+
   const { data, error, isLoading } = useGetUserByUsernameQuery(username, {
     skip: !username, // Skip the query if username is empty
   });
-  const { t } = useTranslation();
 
   useEffect(() => {
     if (isLoading) {
@@ -44,7 +45,7 @@ const App = () => {
             {data?.length ? (
               <Typography variant="body2">{data[0].email}</Typography>
             ) : (
-              <Button color="inherit" component={Link} to="/login">
+              <Button color="inherit" component={Link} to={"/es/login"}>
                 {t("login")}
               </Button>
             )}
@@ -53,12 +54,12 @@ const App = () => {
       </header>
       <Container sx={{ py: 4 }}>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/:lang" element={<Home />} />
           {data?.length && (
-            <Route path="/manager" element={<Manager user={data[0]} />} />
+            <Route path="/:lang/manager" element={<Manager user={data[0]} />} />
           )}
           <Route
-            path="/login"
+            path="/:lang/login"
             element={
               <Login
                 setUsername={setUsername}
@@ -66,7 +67,7 @@ const App = () => {
               />
             }
           />
-          <Route path={"*"} element={<Navigate to={"/login"} />} />
+          <Route path="*" element={<Navigate to={"/es/login"} />} />
         </Routes>
       </Container>
     </BrowserRouter>
