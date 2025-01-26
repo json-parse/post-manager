@@ -41,7 +41,7 @@ const Manager = ({ user }) => {
     };
     const createdPost = await createPost(post);
     if (createdPost.data) {
-      setPosts([createdPost.data, ...posts]);
+      setPosts([...posts, createdPost.data]);
     }
   };
 

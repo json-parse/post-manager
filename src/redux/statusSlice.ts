@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { t } from "i18next";
 
 interface StatusState {
   value: string;
@@ -9,9 +10,9 @@ const initialState: StatusState = {
 };
 
 const STATUS_MSG = {
-  loading: "Loading...",
-  error: "Oh no, there was an error",
-  noUser: "User does not exist",
+  loading: t("loading"),
+  error: t("error.api"),
+  noUser: t("error.noUser"),
   idle: initialState.value,
 };
 
