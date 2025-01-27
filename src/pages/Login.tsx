@@ -12,12 +12,15 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import i18n from "../i18n.ts";
 
-const Login = ({ setUsername, isAuthenticated }) => {
+const Login = ({ setUsername }) => {
   const [defaultValue, setDefaultValue] = useState("Bret");
   const navigate = useNavigate();
   const status = useSelector((state: RootState) => state.status.value);
-  const location = useLocation();
+  const isAuthenticated = Boolean(
+    useSelector((state: RootState) => state.auth.value)
+  );
   const { t } = useTranslation();
+  const location = useLocation();
   const path = location.pathname.split("/")[1];
 
   useEffect(() => {

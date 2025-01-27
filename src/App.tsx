@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes, Navigate, Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "./redux/store.ts";
 import { useGetUserByUsernameQuery } from "./services/posts.ts";
 import { setStatus } from "./redux/statusSlice.ts";
+import { removeToken, setToken } from "./redux/authSlice.ts";
 import Login from "./pages/Login.tsx";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -17,12 +19,16 @@ const App = () => {
   const [username, setUsername] = useState("");
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const isAuthenticated = Boolean(
+    useSelector((state: RootState) => state.auth.value)
+  );
 
   const { data, error, isLoading } = useGetUserByUsernameQuery(username, {
     skip: !username, // Skip the query if username is empty
   });
 
   useEffect(() => {
+    dispatch(removeToken());
     if (isLoading) {
       dispatch(setStatus("loading"));
     } else if (error) {
@@ -31,6 +37,8 @@ const App = () => {
       dispatch(setStatus("noUser"));
     } else if (data) {
       dispatch(setStatus("loading"));
+      const randomToken = Math.random().toString(36);
+      dispatch(setToken(`token/${data[0].id + randomToken}`));
     }
   }, [isLoading, error, data, username, dispatch]);
 
@@ -42,8 +50,15 @@ const App = () => {
             <Typography variant="h6" component="h1" sx={{ flexGrow: 1 }}>
               {t("postManager")}
             </Typography>
-            {data?.length ? (
-              <Typography variant="body2">{data[0].email}</Typography>
+            {isAuthenticated ? (
+              <Button
+                color="inherit"
+                component={Link}
+                to={"/es/login"}
+                onClick={() => dispatch(removeToken())}
+              >
+                {t("logout")}
+              </Button>
             ) : (
               <Button color="inherit" component={Link} to={"/es/login"}>
                 {t("login")}
@@ -55,19 +70,14 @@ const App = () => {
       <Container sx={{ py: 4 }}>
         <Routes>
           <Route path="/:lang" element={<Home />} />
-          {data?.length && (
+          {data && isAuthenticated && (
             <Route path="/:lang/manager" element={<Manager user={data[0]} />} />
           )}
           <Route
             path="/:lang/login"
-            element={
-              <Login
-                setUsername={setUsername}
-                isAuthenticated={Boolean(data?.length)}
-              />
-            }
+            element={<Login setUsername={setUsername} />}
           />
-          <Route path="*" element={<Navigate to={"/es/login"} />} />
+          <Route path="*" element={<Navigate to={"/es"} />} />
         </Routes>
       </Container>
     </BrowserRouter>

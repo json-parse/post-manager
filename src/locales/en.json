@@ -1,6 +1,7 @@
 {
   "postManager": "Post Manager",
   "login": "Login",
+  "logout": "Logout",
   "username": "Username",
   "loading": "Loading...",
   "posts": "Posts",

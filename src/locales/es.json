@@ -1,6 +1,7 @@
 {
   "postManager": "Gestor de Publicaciones",
   "login": "Iniciar sesión",
+  "logout": "Cerrar sesión",
   "username": "Nombre de usuario",
   "loading": "Cargando...",
   "posts": "Publicaciones",

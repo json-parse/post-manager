@@ -10,6 +10,7 @@
     "@reduxjs/toolkit": "^2.5.0",
     "cra-template-typescript": "1.2.0",
     "i18next": "^24.2.2",
+    "js-cookie": "^3.0.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-i18next": "^15.4.0",
