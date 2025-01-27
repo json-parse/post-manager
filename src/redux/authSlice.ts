@@ -1,28 +1,31 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
+import { User } from "../services/types";
 
 interface AuthState {
-  value: string | null;
+  value?: User;
 }
 
 const initialState: AuthState = {
-  value: Cookies.get("token") || null,
+  value: Cookies.get("user")
+    ? JSON.parse(Cookies.get("user") as string)
+    : undefined,
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setToken: (state, { payload: token }: PayloadAction<string>) => {
-      state.value = token;
-      Cookies.set("token", token, { expires: 1 }); //expires in 1 day
+    setAuth: (state, { payload: user }: PayloadAction<User>) => {
+      Cookies.set("user", JSON.stringify(user), { expires: 1 }); //expires in 1 day
+      state.value = user;
     },
-    removeToken: (state) => {
-      state.value = null;
-      Cookies.remove("token");
+    removeAuth: (state) => {
+      Cookies.remove("user");
+      state.value = Cookies.get("user");
     },
   },
 });
 
-export const { setToken, removeToken } = authSlice.actions;
+export const { setAuth, removeAuth } = authSlice.actions;
 export default authSlice.reducer;

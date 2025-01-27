@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./redux/store.ts";
 import { useGetUserByUsernameQuery } from "./services/posts.ts";
 import { setStatus } from "./redux/statusSlice.ts";
-import { setToken } from "./redux/authSlice.ts";
+import { setAuth } from "./redux/authSlice.ts";
 import i18n from "./i18n.ts";
 import { Container } from "@mui/material";
 import Login from "./pages/Login.tsx";
@@ -15,9 +15,7 @@ import NavBar from "./components/NavBar.tsx";
 const App = () => {
   const [username, setUsername] = useState("");
   const dispatch = useDispatch();
-  const isAuthenticated = Boolean(
-    useSelector((state: RootState) => state.auth.value)
-  );
+  const authUser = useSelector((state: RootState) => state.auth.value);
   const location = useSelector((state: RootState) => state.location.value);
 
   const { data, error, isLoading } = useGetUserByUsernameQuery(username, {
@@ -35,8 +33,7 @@ const App = () => {
       dispatch(setStatus("noUser"));
     } else if (data) {
       dispatch(setStatus("loading"));
-      const randomToken = Math.random().toString(36);
-      dispatch(setToken(`token/${data[0].id + randomToken}`));
+      dispatch(setAuth(data[0]));
     }
   }, [isLoading, error, data, username, dispatch, location]);
 
@@ -46,8 +43,11 @@ const App = () => {
       <Container sx={{ py: 4 }}>
         <Routes>
           <Route path="/:lang" element={<Home />} />
-          {data && isAuthenticated && (
-            <Route path="/:lang/manager" element={<Manager user={data[0]} />} />
+          {authUser && (
+            <Route
+              path="/:lang/manager"
+              element={<Manager user={authUser} />}
+            />
           )}
           <Route
             path="/:lang/login"

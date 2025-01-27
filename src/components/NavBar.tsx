@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store.ts";
-import { removeToken } from "../redux/authSlice.ts";
+import { removeAuth } from "../redux/authSlice.ts";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -18,6 +18,7 @@ const NavBar = () => {
   );
   const location = useLocation();
   const path = location.pathname.split("/")[1];
+  const isHomePage = location.pathname === `/${path}`;
 
   useEffect(() => {
     if (path === "en" || path === "es") {
@@ -39,8 +40,13 @@ const NavBar = () => {
           >
             {t("postManager")}
           </Typography>
+          {isAuthenticated && isHomePage && (
+            <Button color="inherit" component={Link} to={`/${path}/manager`}>
+              {t("manage")}
+            </Button>
+          )}
           {isAuthenticated ? (
-            <Button color="inherit" onClick={() => dispatch(removeToken())}>
+            <Button color="inherit" onClick={() => dispatch(removeAuth())}>
               {t("logout")}
             </Button>
           ) : (
