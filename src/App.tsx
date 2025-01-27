@@ -6,6 +6,8 @@ import { useGetUserByUsernameQuery } from "./services/posts.ts";
 import { setStatus } from "./redux/statusSlice.ts";
 import { setAuth } from "./redux/authSlice.ts";
 import i18n from "./i18n.ts";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
 import { Container } from "@mui/material";
 import Login from "./pages/Login.tsx";
 import Manager from "./pages/Manager.tsx";
@@ -20,6 +22,12 @@ const App = () => {
 
   const { data, error, isLoading } = useGetUserByUsernameQuery(username, {
     skip: !username, // Skip the query if username is empty
+  });
+
+  const theme = createTheme({
+    colorSchemes: {
+      dark: useSelector((state: RootState) => state.isDarkTheme.value),
+    },
   });
 
   useEffect(() => {
@@ -38,25 +46,28 @@ const App = () => {
   }, [isLoading, error, data, username, dispatch, location]);
 
   return (
-    <BrowserRouter>
-      <NavBar />
-      <Container sx={{ py: 4 }}>
-        <Routes>
-          <Route path="/:lang" element={<Home />} />
-          {authUser && (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <BrowserRouter>
+        <NavBar />
+        <Container sx={{ py: 4 }}>
+          <Routes>
+            <Route path="/:lang" element={<Home />} />
+            {authUser && (
+              <Route
+                path="/:lang/manager"
+                element={<Manager user={authUser} />}
+              />
+            )}
             <Route
-              path="/:lang/manager"
-              element={<Manager user={authUser} />}
+              path="/:lang/login"
+              element={<Login setUsername={setUsername} />}
             />
-          )}
-          <Route
-            path="/:lang/login"
-            element={<Login setUsername={setUsername} />}
-          />
-          <Route path="*" element={<Navigate to={`/${location}`} />} />
-        </Routes>
-      </Container>
-    </BrowserRouter>
+            <Route path="*" element={<Navigate to={`/${location}`} />} />
+          </Routes>
+        </Container>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 };
 

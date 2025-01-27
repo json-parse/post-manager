@@ -9,12 +9,16 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useTranslation } from "react-i18next";
 import { setLocation } from "../redux/locationSlice.ts";
+import { setDarkTheme } from "../redux/isDarkThemeSlice.ts";
 
 const NavBar = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const isAuthenticated = Boolean(
     useSelector((state: RootState) => state.auth.value)
+  );
+  const isDarkTheme = useSelector(
+    (state: RootState) => state.isDarkTheme.value
   );
   const location = useLocation();
   const path = location.pathname.split("/")[1];
@@ -40,6 +44,12 @@ const NavBar = () => {
           >
             {t("postManager")}
           </Typography>
+          <Button
+            color="inherit"
+            onClick={() => dispatch(setDarkTheme(!isDarkTheme))}
+          >
+            {t("theme")}
+          </Button>
           {isAuthenticated && isHomePage && (
             <Button color="inherit" component={Link} to={`/${path}/manager`}>
               {t("manage")}

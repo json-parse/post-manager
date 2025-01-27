@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import statusReducer from "./statusSlice.ts";
 import authReducer from "./authSlice.ts";
 import locationReducer from "./locationSlice.ts";
+import isDarkThemeReducer from "./isDarkThemeSlice.ts";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { postApi } from "../services/posts.ts";
 
@@ -10,6 +11,7 @@ export const store = configureStore({
     status: statusReducer,
     auth: authReducer,
     location: locationReducer,
+    isDarkTheme: isDarkThemeReducer,
     [postApi.reducerPath]: postApi.reducer,
   },
   // Adding the api middleware enables caching, invalidation, polling,
