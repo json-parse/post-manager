@@ -10,10 +10,11 @@ import Grid from "@mui/material/Grid2";
 import { TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { getMockData } from "../utils.ts";
 
 const Login = ({ setUsername }) => {
   const { t } = useTranslation();
-  const [defaultValue, setDefaultValue] = useState("Bret");
+  const [defaultValue, setDefaultValue] = useState(getMockData());
   const navigate = useNavigate();
   const status = t(useSelector((state: RootState) => state.status.value));
   const isAuthenticated = Boolean(
