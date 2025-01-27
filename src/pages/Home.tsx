@@ -4,10 +4,12 @@ import { useGetAllPostsQuery } from "../services/posts.ts";
 import { setStatus } from "../redux/statusSlice.ts";
 import { RootState } from "../redux/store.ts";
 import PostList from "../components/PostList.tsx";
+import { useTranslation } from "react-i18next";
 
 const Home = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
-  const status = useSelector((state: RootState) => state.status.value);
+  const status = t(useSelector((state: RootState) => state.status.value));
 
   const { data, error, isLoading } = useGetAllPostsQuery();
 

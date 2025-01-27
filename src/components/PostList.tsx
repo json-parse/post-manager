@@ -14,8 +14,8 @@ interface PostListProps {
 }
 
 const PostList = ({ posts, handleUpdate, handleDelete }: PostListProps) => {
-  const status = useSelector((state: RootState) => state.status.value);
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const status = t(useSelector((state: RootState) => state.status.value));
 
   return (
     <>
