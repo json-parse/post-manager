@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./redux/store.ts";
 import { useGetUserByUsernameQuery } from "./services/posts.ts";
 import { setStatus } from "./redux/statusSlice.ts";
-import { removeToken, setToken } from "./redux/authSlice.ts";
+import { setToken } from "./redux/authSlice.ts";
 import i18n from "./i18n.ts";
 import { Container } from "@mui/material";
 import Login from "./pages/Login.tsx";
@@ -25,7 +25,6 @@ const App = () => {
   });
 
   useEffect(() => {
-    dispatch(removeToken());
     i18n.changeLanguage(location);
 
     if (isLoading) {

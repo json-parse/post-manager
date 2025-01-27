@@ -31,16 +31,16 @@ const NavBar = () => {
     <header>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" component="h1" sx={{ flexGrow: 1 }}>
+          <Typography
+            variant="h6"
+            component={Link}
+            to={`/${path}`}
+            sx={{ color: "inherit", textDecoration: "none", flexGrow: 1 }}
+          >
             {t("postManager")}
           </Typography>
           {isAuthenticated ? (
-            <Button
-              color="inherit"
-              component={Link}
-              to={`/${path}/login`}
-              onClick={() => dispatch(removeToken())}
-            >
+            <Button color="inherit" onClick={() => dispatch(removeToken())}>
               {t("logout")}
             </Button>
           ) : (

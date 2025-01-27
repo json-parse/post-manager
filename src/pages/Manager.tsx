@@ -10,7 +10,7 @@ import { setStatus } from "../redux/statusSlice.ts";
 import Post from "../components/Post.tsx";
 import { Post as PostType } from "../services/types.ts";
 import Grid from "@mui/material/Grid2";
-import { Typography } from "@mui/material";
+import { Breadcrumbs, Link, Typography } from "@mui/material";
 import PostList from "../components/PostList.tsx";
 import { t } from "i18next";
 
@@ -64,6 +64,12 @@ const Manager = ({ user }) => {
   if (posts)
     return (
       <Grid container spacing={4} direction="column">
+        <Breadcrumbs aria-label="breadcrumb" sx={{ mt: -2 }}>
+          <Link underline="hover" color="inherit" href="/">
+            {t("posts")}
+          </Link>
+          <Typography sx={{ color: "text.primary" }}>{t("manage")}</Typography>
+        </Breadcrumbs>
         <Grid>
           <Typography variant="h4" component="h2" gutterBottom>
             {t("createNewPost", { username: user.username })}
