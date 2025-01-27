@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import statusReducer from "./statusSlice.ts";
 import authReducer from "./authSlice.ts";
+import locationReducer from "./locationSlice.ts";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { postApi } from "../services/posts.ts";
 
@@ -8,7 +9,7 @@ export const store = configureStore({
   reducer: {
     status: statusReducer,
     auth: authReducer,
-    // Add the generated reducer as a specific top-level slice
+    location: locationReducer,
     [postApi.reducerPath]: postApi.reducer,
   },
   // Adding the api middleware enables caching, invalidation, polling,

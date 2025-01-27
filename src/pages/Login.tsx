@@ -8,9 +8,8 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid2";
 import { TextField } from "@mui/material";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import i18n from "../i18n.ts";
 
 const Login = ({ setUsername }) => {
   const [defaultValue, setDefaultValue] = useState("Bret");
@@ -20,20 +19,13 @@ const Login = ({ setUsername }) => {
     useSelector((state: RootState) => state.auth.value)
   );
   const { t } = useTranslation();
-  const location = useLocation();
-  const path = location.pathname.split("/")[1];
+  const location = useSelector((state: RootState) => state.location.value);
 
   useEffect(() => {
-    if (path === "en" || path === "es") {
-      i18n.changeLanguage(path);
-    } else {
-      i18n.changeLanguage("es");
-    }
-
     if (isAuthenticated) {
-      navigate(`/${path}/manager`);
+      navigate(`/${location}/manager`);
     }
-  }, [isAuthenticated, navigate, location, path]);
+  }, [isAuthenticated, navigate, location]);
 
   const onLogin = (event: React.FormEvent) => {
     event.preventDefault();
